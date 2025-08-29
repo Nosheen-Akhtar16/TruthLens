@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TruthLens | See the Truth</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f7f4fb, #DDCFF1);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Navbar */
+  header {
+    width: 100%;
+    background: #DDCFF1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .navbar {
+    max-width: 1200px;
+    margin: auto;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navbar img {
+    height: 50px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 25px;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #5c48a6;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: #3c2f77;
+  }
+
+  /* Hero Section */
+  .hero {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    text-align: center;
+  }
+
+  .hero-logo {
+    width: 180px;
+    margin-bottom: 25px;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+    color: #4b3b86;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    max-width: 650px;
+    line-height: 1.7;
+    margin-bottom: 35px;
+    color: #444;
+  }
+
+  /* Button */
+  .btn {
+    padding: 14px 35px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #6f5bb3, #8a77d4);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+
+  .btn:hover {
+    background: linear-gradient(135deg, #5d4aa2, #7a68c2);
+    transform: translateY(-2px);
+  }
+
+  /* Footer */
+  footer {
+    background: #bcb0cce3;
+    padding: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+  }
+
+  /* Responsive */
+  @media(max-width: 768px){
+    .navbar {
+      flex-direction: column;
+      gap: 15px;
+    }
+    .hero h1 {
+      font-size: 2rem;
+    }
+    .hero p {
+      font-size: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="navbar">
+      <img src="LOGO.jpeg" alt="TruthLens Logo"/>
+      <nav class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Features</a>
+        <a href="#">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+   
+    <h1 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Welcome to <b>TruthLens</b></h1>
+    <p>Discover clarity and uncover the truth with our innovative platform.  
+    Join us today and experience a timeless way to see the world with greater understanding.</p>
+    <button class="btn">Get Started</button>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 TruthLens · All Rights Reserved
+  </footer>
+
+</body>
+</html>
