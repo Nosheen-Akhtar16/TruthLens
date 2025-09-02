@@ -1,0 +1,58 @@
+.gradient-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.bias-indicator {
+    transition: all 0.3s ease;
+}
+
+.mindful-pulse {
+    animation: mindfulPulse 2s infinite;
+}
+
+@keyframes mindfulPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.loading-dots {
+    display: inline-block;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60% { content: '...'; }
+    80%, 100% { content: ''; }
+}
+
+.perspective-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.perspective-card.left {
+    border-left-color: #3b82f6;
+}
+
+.perspective-card.right {
+    border-left-color: #ef4444;
+}
+
+.perspective-card.center {
+    border-left-color: #10b981;
+}

@@ -1,550 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TruthLens AI - Intelligent Fact-Checking & Bias Detection</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#2563eb',
-                        secondary: '#1e40af',
-                        accent: '#3b82f6',
-                        neutral: '#1f2937',
-                        success: '#10b981',
-                        warning: '#f59e0b',
-                        danger: '#ef4444'
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563eb",
+              secondary: "#1e40af",
+              accent: "#3b82f6",
+              neutral: "#1f2937",
+              success: "#10b981",
+              warning: "#f59e0b",
+              danger: "#ef4444",
+            },
+          },
+        },
+      };
     </script>
-    <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .bias-indicator {
-            transition: all 0.3s ease;
-        }
-        
-        .mindful-pulse {
-            animation: mindfulPulse 2s infinite;
-        }
-        
-        @keyframes mindfulPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .loading-dots {
-            display: inline-block;
-        }
-        
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.5s steps(5, end) infinite;
-        }
-        
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-            80%, 100% { content: ''; }
-        }
-        
-        .perspective-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
-        
-        .perspective-card.left {
-            border-left-color: #3b82f6;
-        }
-        
-        .perspective-card.right {
-            border-left-color: #ef4444;
-        }
-        
-        .perspective-card.center {
-            border-left-color: #10b981;
-        }
-    </style>
-</head>
-<body class="bg-gray-50 min-h-screen">
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-gray-50 min-h-screen">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 flex items-center">
-                        <i class="fas fa-search text-primary text-2xl mr-2"></i>
-                        <span class="text-xl font-bold text-gray-800">TruthLens AI</span>
-                    </div>
-                    <div class="hidden md:ml-6 md:flex md:space-x-8">
-                        <a href="#analyzer" class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium">Analyzer</a>
-                        <a href="#features" class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium">Features</a>
-                        <a href="#about" class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium">About</a>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <button id="themeToggle" class="p-2 rounded-full text-gray-600 hover:text-primary">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 flex items-center">
+              <i class="fas fa-search text-primary text-2xl mr-2"></i>
+              <span class="text-xl font-bold text-gray-800">TruthLens AI</span>
             </div>
+            <div class="hidden md:ml-6 md:flex md:space-x-8">
+              <a
+                href="#analyzer"
+                class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium"
+                >Analyzer</a
+              >
+              <a
+                href="#features"
+                class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium"
+                >Features</a
+              >
+              <a
+                href="#about"
+                class="text-gray-600 hover:text-primary px-3 py-2 text-sm font-medium"
+                >About</a
+              >
+            </div>
+          </div>
+          <div class="flex items-center">
+            <button
+              id="themeToggle"
+              class="p-2 rounded-full text-gray-600 hover:text-primary"
+            >
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
         </div>
+      </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="gradient-bg pt-24 pb-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
-                    See Beyond the Headlines
-                </h1>
-                <p class="text-xl md:text-2xl text-white opacity-90 mb-8 max-w-3xl mx-auto">
-                    AI-powered fact-checking, bias detection, and mindful news consumption to help you see the full story.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#analyzer" class="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
-                        <i class="fas fa-search mr-2"></i>Analyze Content
-                    </a>
-                    <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition duration-300">
-                        <i class="fas fa-download mr-2"></i>Get Extension
-                    </button>
-                </div>
-            </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+          See Beyond the Headlines
+        </h1>
+        <p
+          class="text-xl md:text-2xl text-white opacity-90 mb-8 max-w-3xl mx-auto"
+        >
+          AI-powered fact-checking, bias detection, and mindful news consumption
+          to help you see the full story.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="#analyzer"
+            class="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300"
+          >
+            <i class="fas fa-search mr-2"></i>Analyze Content
+          </a>
+          <button
+            class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition duration-300"
+          >
+            <i class="fas fa-download mr-2"></i>Get Extension
+          </button>
         </div>
+      </div>
     </section>
 
-    <!-- Main Analyzer Section -->
+    <!-- Analyzer -->
     <section id="analyzer" class="py-16 bg-white">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">AI-Powered Content Analyzer</h2>
-                <p class="text-lg text-gray-600">Paste any news article URL or text content to analyze its bias, check facts, and get balanced perspectives</p>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-xl p-6 mb-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Enter News URL</label>
-                        <input type="url" id="articleUrl" placeholder="https://example.com/news-article" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Or paste text content</label>
-                        <textarea id="articleText" placeholder="Paste article text here..." rows="1"
-                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <label class="flex items-center">
-                        <input type="checkbox" id="mindfulMode" class="rounded text-primary focus:ring-primary">
-                        <span class="ml-2 text-sm text-gray-700">Enable Mindful Mode (get breaks and mental wellness tips)</span>
-                    </label>
-                </div>
-
-                <button id="analyzeBtn" class="w-full bg-primary hover:bg-secondary text-white py-3 px-6 rounded-lg font-semibold transition duration-300 flex items-center justify-center">
-                    <i class="fas fa-search mr-2"></i>Analyze Content
-                </button>
-            </div>
-
-            <!-- Results Section -->
-            <div id="resultsSection" class="hidden bg-white rounded-xl shadow-xl p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-gray-800">Analysis Results</h3>
-                    <button id="shareResults" class="text-primary hover:text-secondary">
-                        <i class="fas fa-share-alt"></i> Share
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <!-- Bias Score -->
-                    <div class="bg-gray-50 p-4 rounded-lg text-center">
-                        <div class="text-3xl font-bold text-primary mb-2" id="biasScore">72%</div>
-                        <div class="text-sm text-gray-600">Balanced Content</div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div class="bg-primary h-2 rounded-full" style="width: 72%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Reliability Score -->
-                    <div class="bg-gray-50 p-4 rounded-lg text-center">
-                        <div class="text-3xl font-bold text-success mb-2" id="reliabilityScore">85%</div>
-                        <div class="text-sm text-gray-600">Highly Reliable</div>
-                        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div class="bg-success h-2 rounded-full" style="width: 85%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Emotional Tone -->
-                    <div class="bg-gray-50 p-4 rounded-lg text-center">
-                        <div class="text-3xl font-bold text-warning mb-2" id="emotionalTone">Neutral</div>
-                        <div class="text-sm text-gray-600">Emotional Tone</div>
-                        <div class="flex justify-center mt-2">
-                            <i class="fas fa-meh text-warning text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bias Explanation -->
-                <div class="mb-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-3">Bias Analysis</h4>
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <p id="biasExplanation" class="text-gray-700">This content shows moderate left-leaning bias with balanced factual reporting. The language is generally neutral with slight emotional appeal toward progressive viewpoints.</p>
-                    </div>
-                </div>
-
-                <!-- Multi-perspective Carousel -->
-                <div class="mb-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-3">Multi-Perspective Views</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="perspectivesContainer">
-                        <!-- Perspectives will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Fact Check Results -->
-                <div>
-                    <h4 class="text-lg font-semibold text-gray-800 mb-3">Fact Check Results</h4>
-                    <div class="space-y-3" id="factCheckResults">
-                        <!-- Fact checks will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Loading State -->
-            <div id="loadingState" class="hidden text-center py-12">
-                <div class="inline-flex items-center justify-center p-4 bg-white rounded-full shadow-lg mb-4">
-                    <i class="fas fa-cog fa-spin text-primary text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">Analyzing Content</h3>
-                <p class="text-gray-600">Our AI is examining the text for bias, facts, and multiple perspectives<span class="loading-dots"></span></p>
-            </div>
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            AI-Powered Content Analyzer
+          </h2>
+          <p class="text-lg text-gray-600">
+            Paste any news article URL or text content to analyze its bias,
+            check facts, and get balanced perspectives
+          </p>
         </div>
+
+        <div class="bg-white rounded-xl shadow-xl p-6 mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Enter News URL</label
+              >
+              <input
+                type="url"
+                id="articleUrl"
+                placeholder="https://example.com/news-article"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Or paste text content</label
+              >
+              <textarea
+                id="articleText"
+                placeholder="Paste article text here..."
+                rows="1"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label class="flex items-center">
+              <input
+                type="checkbox"
+                id="mindfulMode"
+                class="rounded text-primary focus:ring-primary"
+              />
+              <span class="ml-2 text-sm text-gray-700"
+                >Enable Mindful Mode (get breaks and mental wellness tips)</span
+              >
+            </label>
+          </div>
+
+          <button
+            id="analyzeBtn"
+            class="w-full bg-primary hover:bg-secondary text-white py-3 px-6 rounded-lg font-semibold transition duration-300 flex items-center justify-center"
+          >
+            <i class="fas fa-search mr-2"></i>Analyze Content
+          </button>
+        </div>
+
+        <!-- Results Section -->
+        <div
+          id="resultsSection"
+          class="hidden bg-white rounded-xl shadow-xl p-6"
+        >
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-800">Analysis Results</h3>
+            <button id="shareResults" class="text-primary hover:text-secondary">
+              <i class="fas fa-share-alt"></i> Share
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-gray-50 p-4 rounded-lg text-center">
+              <div class="text-3xl font-bold text-primary mb-2" id="biasScore">
+                72%
+              </div>
+              <div class="text-sm text-gray-600">Balanced Content</div>
+              <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div
+                  class="bg-primary h-2 rounded-full"
+                  style="width: 72%"
+                ></div>
+              </div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg text-center">
+              <div
+                class="text-3xl font-bold text-success mb-2"
+                id="reliabilityScore"
+              >
+                85%
+              </div>
+              <div class="text-sm text-gray-600">Highly Reliable</div>
+              <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div
+                  class="bg-success h-2 rounded-full"
+                  style="width: 85%"
+                ></div>
+              </div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg text-center">
+              <div
+                class="text-3xl font-bold text-warning mb-2"
+                id="emotionalTone"
+              >
+                Neutral
+              </div>
+              <div class="text-sm text-gray-600">Emotional Tone</div>
+              <div class="flex justify-center mt-2">
+                <i class="fas fa-meh text-warning text-xl"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <h4 class="text-lg font-semibold text-gray-800 mb-3">
+              Bias Analysis
+            </h4>
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <p id="biasExplanation" class="text-gray-700">
+                This content shows moderate left-leaning bias with balanced
+                factual reporting. The language is generally neutral with slight
+                emotional appeal toward progressive viewpoints.
+              </p>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <h4 class="text-lg font-semibold text-gray-800 mb-3">
+              Multi-Perspective Views
+            </h4>
+            <div
+              class="grid grid-cols-1 md:grid-cols-3 gap-4"
+              id="perspectivesContainer"
+            ></div>
+          </div>
+
+          <div>
+            <h4 class="text-lg font-semibold text-gray-800 mb-3">
+              Fact Check Results
+            </h4>
+            <div class="space-y-3" id="factCheckResults"></div>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden text-center py-12">
+          <div
+            class="inline-flex items-center justify-center p-4 bg-white rounded-full shadow-lg mb-4"
+          >
+            <i class="fas fa-cog fa-spin text-primary text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">
+            Analyzing Content
+          </h3>
+          <p class="text-gray-600">
+            Our AI is examining the text for bias, facts, and multiple
+            perspectives<span class="loading-dots"></span>
+          </p>
+        </div>
+      </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- Features -->
     <section id="features" class="py-16 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Powerful Features</h2>
-                <p class="text-lg text-gray-600">Advanced AI technology to help you navigate the information landscape</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-md card-hover">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-brain text-primary text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">AI Bias Detection</h3>
-                    <p class="text-gray-600">Advanced machine learning algorithms detect political bias, emotional tone, and manipulative language patterns in content.</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-md card-hover">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-check-double text-success text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Fact Checking</h3>
-                    <p class="text-gray-600">Cross-reference claims with verified fact-checking databases and provide reliability scores for factual accuracy.</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-md card-hover">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-balance-scale text-purple-600 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Multi-Perspective</h3>
-                    <p class="text-gray-600">Get balanced viewpoints from across the political spectrum to understand the full context of any story.</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-md card-hover">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-heart text-warning text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Mindful Mode</h3>
-                    <p class="text-gray-600">Protect your mental wellbeing with breaks, emotional tone warnings, and stress-reducing features.</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-md card-hover">
-                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-trophy text-danger text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Gamification</h3>
-                    <p class="text-gray-600">Earn badges and achievements for balanced reading habits and media literacy skills development.</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-md card-hover">
-                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-chart-line text-indigo-600 text-xl"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Analytics Dashboard</h3>
-                    <p class="text-gray-600">Track your reading patterns, bias exposure, and personal growth in media literacy over time.</p>
-                </div>
-            </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            Powerful Features
+          </h2>
+          <p class="text-lg text-gray-600">
+            Advanced AI technology to help you navigate the information
+            landscape
+          </p>
         </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-brain text-primary text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">
+              AI Bias Detection
+            </h3>
+            <p class="text-gray-600">
+              Advanced machine learning algorithms detect political bias,
+              emotional tone, and manipulative language patterns in content.
+            </p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+            <div
+              class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-check-double text-success text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">
+              Fact Checking
+            </h3>
+            <p class="text-gray-600">
+              Cross-reference claims with verified fact-checking databases and
+              provide reliability scores for factual accuracy.
+            </p>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+            <div
+              class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-balance-scale text-purple-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">
+              Multi-Perspective
+            </h3>
+            <p class="text-gray-600">
+              Get balanced viewpoints from across the political spectrum to
+              understand the full context of any story.
+            </p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+            <div
+              class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-heart text-warning text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">
+              Mindful Mode
+            </h3>
+            <p class="text-gray-600">
+              Protect your mental wellbeing with breaks, emotional tone
+              warnings, and stress-reducing features.
+            </p>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+            <div
+              class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-trophy text-danger text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">
+              Gamification
+            </h3>
+            <p class="text-gray-600">
+              Earn badges and achievements for balanced reading habits and media
+              literacy skills development.
+            </p>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+            <div
+              class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-chart-line text-indigo-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">
+              Analytics Dashboard
+            </h3>
+            <p class="text-gray-600">
+              Track your reading patterns, bias exposure, and personal growth in
+              media literacy over time.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About -->
     <section id="about" class="py-16 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">How TruthLens Works</h2>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f7124474-3173-48bb-ba68-ef89e5daae6d.png" alt="AI technology analyzing news content with visual data streams and machine learning diagrams" class="rounded-xl shadow-lg w-full">
-                </div>
-                <div>
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Advanced AI Technology</h3>
-                    <p class="text-gray-600 mb-6">
-                        TruthLens uses state-of-the-art natural language processing and machine learning algorithms to analyze content for bias, factual accuracy, and emotional tone. Our system is trained on millions of articles from diverse sources to provide comprehensive analysis.
-                    </p>
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-primary flex items-center justify-center mt-1">
-                                <i class="fas fa-check text-white text-xs"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-gray-800 font-medium">BERT-based bias classification</p>
-                                <p class="text-gray-600 text-sm">Advanced transformer models detect subtle political and ideological biases</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-primary flex items-center justify-center mt-1">
-                                <i class="fas fa-check text-white text-xs"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-gray-800 font-medium">Fact-checking database integration</p>
-                                <p class="text-gray-600 text-sm">Cross-references with verified fact-checking organizations worldwide</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 h-6 w-6 rounded-full bg-primary flex items-center justify-center mt-1">
-                                <i class="fas fa-check text-white text-xs"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-gray-800 font-medium">Emotional sentiment analysis</p>
-                                <p class="text-gray-600 text-sm">Detects emotional manipulation and stressful content patterns</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            How TruthLens Works
+          </h2>
         </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <img
+              src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f7124474-3173-48bb-ba68-ef89e5daae6d.png"
+              alt="AI technology analyzing news content with visual data streams and machine learning diagrams"
+              class="rounded-xl shadow-lg w-full"
+            />
+          </div>
+          <div>
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">
+              Advanced AI Technology
+            </h3>
+            <p class="text-gray-600 mb-6">
+              TruthLens uses state-of-the-art natural language processing and
+              machine learning algorithms to analyze content for bias, factual
+              accuracy, and emotional tone. Our system is trained on millions of
+              articles from diverse sources to provide comprehensive analysis.
+            </p>
+            <div class="space-y-4">
+              <div class="flex items-start">
+                <div
+                  class="flex-shrink-0 h-6 w-6 rounded-full bg-primary flex items-center justify-center mt-1"
+                >
+                  <i class="fas fa-check text-white text-xs"></i>
+                </div>
+                <div class="ml-3">
+                  <p class="text-gray-800 font-medium">
+                    BERT-based bias classification
+                  </p>
+                  <p class="text-gray-600 text-sm">
+                    Advanced transformer models detect subtle political and
+                    ideological biases
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div
+                  class="flex-shrink-0 h-6 w-6 rounded-full bg-primary flex items-center justify-center mt-1"
+                >
+                  <i class="fas fa-check text-white text-xs"></i>
+                </div>
+                <div class="ml-3">
+                  <p class="text-gray-800 font-medium">
+                    Fact-checking database integration
+                  </p>
+                  <p class="text-gray-600 text-sm">
+                    Cross-references with verified fact-checking organizations
+                    worldwide
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div
+                  class="flex-shrink-0 h-6 w-6 rounded-full bg-primary flex items-center justify-center mt-1"
+                >
+                  <i class="fas fa-check text-white text-xs"></i>
+                </div>
+                <div class="ml-3">
+                  <p class="text-gray-800 font-medium">
+                    Emotional sentiment analysis
+                  </p>
+                  <p class="text-gray-600 text-sm">
+                    Detects emotional manipulation and stressful content
+                    patterns
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">TruthLens AI</h4>
-                    <p class="text-gray-400">Empowering critical thinking through AI-powered media analysis and fact-checking.</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Features</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white">Bias Detection</a></li>
-                        <li><a href="#" class="hover:text-white">Fact Checking</a></li>
-                        <li><a href="#" class="hover:text-white">Mindful Mode</a></li>
-                        <li><a href="#" class="hover:text-white">Multi-Perspective</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white">API Documentation</a></li>
-                        <li><a href="#" class="hover:text-white">Browser Extension</a></li>
-                        <li><a href="#" class="hover:text-white">Research Papers</a></li>
-                        <li><a href="#" class="hover:text-white">Media Literacy Guide</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Connect</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
-                    </div>
-                </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h4 class="text-lg font-semibold mb-4">TruthLens AI</h4>
+            <p class="text-gray-400">
+              Empowering critical thinking through AI-powered media analysis and
+              fact-checking.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Features</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white">Bias Detection</a></li>
+              <li><a href="#" class="hover:text-white">Fact Checking</a></li>
+              <li><a href="#" class="hover:text-white">Mindful Mode</a></li>
+              <li>
+                <a href="#" class="hover:text-white">Multi-Perspective</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Resources</h4>
+            <ul class="space-y-2 text-gray-400">
+              <li>
+                <a href="#" class="hover:text-white">API Documentation</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white">Browser Extension</a>
+              </li>
+              <li><a href="#" class="hover:text-white">Research Papers</a></li>
+              <li>
+                <a href="#" class="hover:text-white">Media Literacy Guide</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Connect</h4>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white"
+                ><i class="fab fa-twitter"></i
+              ></a>
+              <a href="https://www.linkedin.com/feed/?trk=guest_homepage-basic_google-one-tap-submit" class="text-gray-400 hover:text-white"
+                ><i class="fab fa-linkedin"></i
+              ></a>
+              <a href="#" class="text-gray-400 hover:text-white"
+                ><i class="fab fa-github"></i
+              ></a>
+              <a href="#" class="text-gray-400 hover:text-white"
+                ><i class="fab fa-discord"></i
+              ></a>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>© 2024 TruthLens AI. All rights reserved. Building a more informed world.</p>
-            </div>
+          </div>
         </div>
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400"
+        >
+          <p>
+            © 2024 TruthLens AI. All rights reserved. Building a more informed
+            world.
+          </p>
+        </div>
+      </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Theme toggle
-            const themeToggle = document.getElementById('themeToggle');
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark');
-                const icon = themeToggle.querySelector('i');
-                if (document.body.classList.contains('dark')) {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    document.body.classList.add('bg-gray-900');
-                    document.body.classList.remove('bg-gray-50');
-                } else {
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    document.body.classList.remove('bg-gray-900');
-                    document.body.classList.add('bg-gray-50');
-                }
-            });
-
-            // Analyze button functionality
-            const analyzeBtn = document.getElementById('analyzeBtn');
-            const resultsSection = document.getElementById('resultsSection');
-            const loadingState = document.getElementById('loadingState');
-            
-            analyzeBtn.addEventListener('click', async function() {
-                const url = document.getElementById('articleUrl').value;
-                const text = document.getElementById('articleText').value;
-                const mindfulMode = document.getElementById('mindfulMode').checked;
-                
-                if (!url && !text) {
-                    alert('Please enter a URL or paste some text to analyze');
-                    return;
-                }
-                
-                // Show loading state
-                resultsSection.classList.add('hidden');
-                loadingState.classList.remove('hidden');
-                analyzeBtn.disabled = true;
-                
-                try {
-                    // Simulate API call to Python backend
-                    const response = await fetch('/analyze', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            url: url,
-                            text: text,
-                            mindful_mode: mindfulMode
-                        })
-                    });
-                    
-                    const data = await response.json();
-                    
-                    // Update UI with results
-                    updateResults(data);
-                    
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Error analyzing content. Please try again.');
-                } finally {
-                    loadingState.classList.add('hidden');
-                    resultsSection.classList.remove('hidden');
-                    analyzeBtn.disabled = false;
-                }
-            });
-            
-            function updateResults(data) {
-                // Update scores
-                document.getElementById('biasScore').textContent = data.bias_score + '%';
-                document.querySelector('#biasScore').closest('div').querySelector('.bg-primary').style.width = data.bias_score + '%';
-                
-                document.getElementById('reliabilityScore').textContent = data.reliability_score + '%';
-                document.querySelector('#reliabilityScore').closest('div').querySelector('.bg-success').style.width = data.reliability_score + '%';
-                
-                document.getElementById('emotionalTone').textContent = data.emotional_tone;
-                const toneIcon = document.querySelector('#emotionalTone').closest('div').querySelector('i');
-                if (data.emotional_tone === 'Positive') {
-                    toneIcon.className = 'fas fa-smile text-warning text-xl';
-                } else if (data.emotional_tone === 'Negative') {
-                    toneIcon.className = 'fas fa-frown text-warning text-xl';
-                } else {
-                    toneIcon.className = 'fas fa-meh text-warning text-xl';
-                }
-                
-                // Update bias explanation
-                document.getElementById('biasExplanation').textContent = data.bias_explanation;
-                
-                // Update perspectives
-                const perspectivesContainer = document.getElementById('perspectivesContainer');
-                perspectivesContainer.innerHTML = '';
-                data.perspectives.forEach(perspective => {
-                    const card = document.createElement('div');
-                    card.className = `perspective-card ${perspective.bias.toLowerCase()} bg-white p-4 rounded-lg shadow-sm`;
-                    card.innerHTML = `
-                        <div class="flex items-start mb-3">
-                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3">
-                                <i class="fas fa-newspaper text-${perspective.bias === 'Left' ? 'blue' : perspective.bias === 'Right' ? 'red' : 'green'}-500"></i>
-                            </div>
-                            <div>
-                                <h5 class="font-semibold text-gray-800">${perspective.source}</h5>
-                                <span class="text-xs px-2 py-1 rounded-full ${perspective.bias === 'Left' ? 'bg-blue-100 text-blue-800' : perspective.bias === 'Right' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">${perspective.bias}</span>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 text-sm">${perspective.summary}</p>
-                    `;
-                    perspectivesContainer.appendChild(card);
-                });
-                
-                // Update fact checks
-                const factCheckContainer = document.getElementById('factCheckResults');
-                factCheckContainer.innerHTML = '';
-                data.fact_checks.forEach(fact => {
-                    const factElement = document.createElement('div');
-                    factElement.className = 'flex items-start p-3 bg-gray-50 rounded-lg';
-                    factElement.innerHTML = `
-                        <div class="flex-shrink-0 w-5 h-5 rounded-full ${fact.verified ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} flex items-center justify-center mr-3 mt-1">
-                            <i class="fas ${fact.verified ? 'fa-check' : 'fa-times'} text-xs"></i>
-                        </div>
-                        <div>
-                            <p class="text-gray-800 font-medium">${fact.claim}</p>
-                            <p class="text-gray-600 text-sm">${fact.explanation}</p>
-                        </div>
-                    `;
-                    factCheckContainer.appendChild(factElement);
-                });
-                
-                // Handle mindful mode
-                if (data.mindful_mode && data.mindful_mode.enabled) {
-                    setTimeout(() => {
-                        alert('Mindful Mode: You\'ve been reading for a while. Consider taking a short break!');
-                    }, 3000);
-                }
-            }
-            
-            // Share results
-            document.getElementById('shareResults').addEventListener('click', function() {
-                alert('Share functionality would connect to social media APIs here');
-            });
-            
-            // Smooth scrolling for navigation
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-        });
-    </script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
-
